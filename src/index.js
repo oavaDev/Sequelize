@@ -4,7 +4,7 @@ import './models/Projects.js';
 import './models/Task.js';
 async function main() {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     console.log('Connection has been established successfully.');
     app.listen(3000);
     console.log('Server on port 3000');
