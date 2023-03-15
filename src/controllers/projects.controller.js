@@ -36,21 +36,10 @@ export const createProject = async (req, res) => {
 
 export const updateProject = async (req, res) => {
   const { id } = req.params;
-  const { name, priority, description } = req.body;
-  await Project.findByPk(id);
   try {
-    await Project.update(
-      {
-        name,
-        priority,
-        description,
-      },
-      {
-        where: {
-          id,
-        },
-      }
-    );
+    const project = await Project.findByPk(id);
+    await project.set(req.body);
+    await project.save();
     res.status(201).json('Project updated');
   } catch (error) {
     return res.status(500).json({ message: error.message });

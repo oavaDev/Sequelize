@@ -11,11 +11,11 @@ export const getTasks = async (req, res) => {
 export const getTaskById = async (req, res) => {
   const { id } = req.params;
   try {
-    const Task = await Task.findByPk(id);
-    if (!Task) {
+    const task = await Task.findByPk(id);
+    if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
-    res.json(Task);
+    res.json(task);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -36,21 +36,11 @@ export const createTask = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   const { id } = req.params;
-  const { name, priority, description } = req.body;
-  await Task.findByPk(id);
+
   try {
-    await Task.update(
-      {
-        name,
-        priority,
-        description,
-      },
-      {
-        where: {
-          id,
-        },
-      }
-    );
+    const task = await Task.findByPk(id);
+    await task.set(req.body);
+    await task.save();
     res.status(201).json('Task updated');
   } catch (error) {
     return res.status(500).json({ message: error.message });
